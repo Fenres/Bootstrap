@@ -4,6 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">    <title>Поиск животных</title>
+
+    <style>
+
+      body {
+        font-family: Arial, sans-serif;
+  
+        margin: 0;
+        padding: 0;
+        background-color: #f8f9fa;
+      }
+  
+      header {
+  
+        padding: 20px;
+  
+      }
+  
+      main {
+        padding: 20px;
+      }
+  
+      .search-box {
+        background-color: #ffffff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+  
+      .search-box input, .search-box button {
+        padding: 10px;
+        margin: 5px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+  
+      .search-box button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+  
+      .search-box button:hover {
+        background-color: #0056b3;
+      }
+  
+      .ad {
+        background-color: #ffffff;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+  
+      .ad img {
+        max-width: 40%;
+        height: auto;
+        border-radius: 8px;
+      }
+  
+      .ad p {
+        margin: 5px 0;
+      }
+  
+      footer {
+        background-color: #f1f1f1;
+        text-align: center;
+        padding: 10px 0;
+        margin-top: 20px;
+      }
+    </style>
 </head>
 <body>
    <header class="bg-light bg-gradient">
@@ -42,26 +114,107 @@
    </header>
  
    <main>
-     <div class="search-box text-center">
-       <h3>Поиск</h3>
-       <input type="text" id="regionInput" placeholder="Район">
-       <input type="text" id="animalTypeInput" placeholder="Вид животного">
-       <button type="button" class="btn btn-primary" onclick="searchAds()">Найти</button>
-     </div>
+    <body>
 
-     <div id="adsContainer"></div>
-
-     <!-- Pagination controls -->
-     <div id="paginationContainer" class="text-center">
-       <button id="prevPage" class="btn btn-secondary" onclick="changePage(-1)">Предыдущая</button>
-       <span id="pageNumber">1</span>
-       <button id="nextPage" class="btn btn-secondary" onclick="changePage(1)">Следующая</button>
-     </div>
-   </main>
+    
+      
+      <main>
+        <div class="search-box text-center">
+          <h3>Поиск</h3>
+          <input type="text" id="regionInput" placeholder="Район">
+          <input type="text" id="animalTypeInput" placeholder="Вид животного">
+          <button onclick="searchAds()">Найти</button>
+        </div>
+      
+        <div id="adsContainer">
+      
+        </div>
+      </main>
+      
+      <footer>
+        <p>Поиск объявлений о потерянных животных © 2024</p>
+      </footer>
+      
+      <script>
+        const ads = [
+          {
+            id: 18,
+            type: "Коза",
+            description: "Потерялась коза, последний раз видели в здании Московского вокзала г. Санкт-Петербург. Коза белая, пуховая.",
+            chipNumber: "go-011-spb",
+            region: "Центральный",
+            date: "14-03-2022",
+            image: "png/Коза.jpeg"
+          },
+          {
+            id: 14,
+            type: "Кошка",
+            description: "Потерялась кошка, пушистая, серая. Любит играть, ласковая.",
+            chipNumber: "ca-001-spb",
+            region: "Василиостровский",
+            date: "24-03-2020",
+            image: "png/Кошка.jpg"
+          },
+          {
+            id: 42,
+            type: "Собака",
+            description: "Собака рыжая, была утеряна в красногвардейском райне районе",
+            chipNumber: "do-123-spb",
+            region: "Красногвардейский",
+            date: "22-07-2023",
+            image: "png/Собака.jpg"
+          },
+      
+          {
+            id: 42,
+            type: "Собака",
+            description: "Потерялась собака, больших размеров, коричневого цвета. Отзывчивая, дружелюбная.",
+            chipNumber: "dog-123-spb",
+            region: "Московский",
+            date: "01-04-2023",
+            image: "png/Собака1.jpg"
+          },
+      
+        ];
+      
+        function displayAds(filteredAds) {
+          const adsContainer = document.getElementById('adsContainer');
+          adsContainer.innerHTML = '';
+          if (filteredAds.length === 0) {
+            adsContainer.innerHTML = '<p>Объявлений не найдено.</p>';
+            return;
+          }
+          filteredAds.forEach(ad => {
+            const adElement = document.createElement('div');
+            adElement.className = 'ad';
+            adElement.innerHTML = `
+              <img src="${ad.image}" alt="${ad.type}">
+              <p><strong>ID:</strong> ${ad.id}</p>
+              <p><strong>Вид животного:</strong> ${ad.type}</p>
+              <p><strong>Описание:</strong> ${ad.description}</p>
+              <p><strong>Номер чипа:</strong> ${ad.chipNumber}</p>
+              <p><strong>Район:</strong> ${ad.region}</p>
+              <p><strong>Дата:</strong> ${ad.date}</p>
+            `;
+            adsContainer.appendChild(adElement);
+          });
+        }
+      
+        function searchAds() {
+          const region = document.getElementById('regionInput').value.trim();
+          const animalType = document.getElementById('animalTypeInput').value.trim().toLowerCase();
+          const filteredAds = ads.filter(ad => {
+            const matchesRegion = region ? ad.region === region : true;
+            const matchesType = animalType ? ad.type.toLowerCase().includes(animalType) : true;
+            return matchesRegion && matchesType;
+          });
+          displayAds(filteredAds);
+        }
+      
+        displayAds(ads);
+      </script>
  
-   <footer>
-     <p>Поиск объявлений о потерянных животных © 2024</p>
-   </footer>
+ 
 
    <script>
     let currentPage = 1;
@@ -76,29 +229,6 @@
       if (region) queryParams.append('district', region);
       if (animalType) queryParams.append('kind', animalType);
   
-      try {
-        // Fetch results from the backend API
-        const response = await fetch(`https://yourapi.com/api/search/?${queryParams.toString()}`);
-  
-        if (!response.ok) {
-          throw new Error('Failed to fetch data from the server');
-        }
-  
-        const data = await response.json();
-  
-        // Display ads or message if no results
-        if (data.data.orders && data.data.orders.length > 0) {
-          displayAds(data.data.orders);
-          setupPagination(data.data.orders.length);
-        } else {
-          displayAds([]);
-          document.getElementById('paginationContainer').style.display = 'none';  // Hide pagination
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        document.getElementById('adsContainer').innerHTML = '<p>Произошла ошибка при загрузке данных. Пожалуйста, попробуйте снова.</p>';
-      }
-    }
   
     function displayAds(ads) {
       const adsContainer = document.getElementById('adsContainer');
