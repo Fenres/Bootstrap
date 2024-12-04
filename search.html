@@ -3,28 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">    <title>Поиск животных</title>
-
+    <link href="./node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Поиск животных</title>
     <style>
-
       body {
         font-family: Arial, sans-serif;
-  
         margin: 0;
         padding: 0;
         background-color: #f8f9fa;
       }
-  
+
       header {
-  
         padding: 20px;
-  
       }
-  
+
       main {
         padding: 20px;
       }
-  
+
       .search-box {
         background-color: #ffffff;
         padding: 15px;
@@ -32,25 +28,25 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
       }
-  
+
       .search-box input, .search-box button {
         padding: 10px;
         margin: 5px;
         border-radius: 4px;
         border: 1px solid #ccc;
       }
-  
+
       .search-box button {
         background-color: #007bff;
         color: white;
         border: none;
         cursor: pointer;
       }
-  
+
       .search-box button:hover {
         background-color: #0056b3;
       }
-  
+
       .ad {
         background-color: #ffffff;
         padding: 15px;
@@ -58,17 +54,17 @@
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
-  
+
       .ad img {
         max-width: 40%;
         height: auto;
         border-radius: 8px;
       }
-  
+
       .ad p {
         margin: 5px 0;
       }
-  
+
       footer {
         background-color: #f1f1f1;
         text-align: center;
@@ -78,6 +74,7 @@
     </style>
 </head>
 <body>
+
    <header class="bg-light bg-gradient">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -102,7 +99,7 @@
             </ul>
             <form class="d-flex">
               <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search">
-              <button type="button" class="btn btn-primary" onclick="searchAds()">Поиск</button>
+              <button type="button" class="btn btn-primary">Поиск</button>
             </form>
           </div>
         </div>
@@ -114,179 +111,136 @@
    </header>
  
    <main>
-    <body>
+    <div class="search-box text-center">
+      <h3>Поиск</h3>
+      <input type="text" id="regionInput" placeholder="Район">
+      <input type="text" id="animalTypeInput" placeholder="Вид животного">
+      <button onclick="searchAds()">Найти</button>
+    </div>
+  
+    <div id="adsContainer"></div>
+  
+    <!-- Пагинация -->
+    <div id="paginationContainer" style="display: none;">
+      <button id="prevPage" onclick="changePage(-1)">Предыдущая</button>
+      <span id="pageNumber">1</span>
+      <button id="nextPage" onclick="changePage(1)">Следующая</button>
+    </div>
+  </main>
+  
+  <footer>
+    <p>Поиск объявлений о потерянных животных © 2024</p>
+  </footer>
+  
+  <script>
+    const ads = [
+      {
+        id: 18,
+        type: "Коза",
+        description: "Потерялась коза, последний раз видели в здании Московского вокзала г. Санкт-Петербург. Коза белая, пуховая.",
+        chipNumber: "go-011-spb",
+        region: "Центральный",
+        date: "14-03-2022",
+        image: "png/Коза.jpeg"
+      },
+      {
+        id: 14,
+        type: "Кошка",
+        description: "Потерялась кошка, пушистая, серая. Любит играть, ласковая.",
+        chipNumber: "ca-001-spb",
+        region: "Василиостровский",
+        date: "24-03-2020",
+        image: "png/Кошка.jpg"
+      },
+      {
+        id: 42,
+        type: "Собака",
+        description: "Собака рыжая, была утеряна в красногвардейском районе.",
+        chipNumber: "do-123-spb",
+        region: "Красногвардейский",
+        date: "22-07-2023",
+        image: "png/Собака.jpg"
+      },
+      {
+        id: 43,
+        type: "Собака",
+        description: "Потерялась собака, больших размеров, коричневого цвета. Отзывчивая, дружелюбная.",
+        chipNumber: "dog-123-spb",
+        region: "Московский",
+        date: "01-04-2023",
+        image: "png/Собака1.jpg"
+      }
+    ];
 
-    
-      
-      <main>
-        <div class="search-box text-center">
-          <h3>Поиск</h3>
-          <input type="text" id="regionInput" placeholder="Район">
-          <input type="text" id="animalTypeInput" placeholder="Вид животного">
-          <button onclick="searchAds()">Найти</button>
-        </div>
-      
-        <div id="adsContainer">
-      
-        </div>
-      </main>
-      
-      <footer>
-        <p>Поиск объявлений о потерянных животных © 2024</p>
-      </footer>
-      
-      <script>
-        const ads = [
-          {
-            id: 18,
-            type: "Коза",
-            description: "Потерялась коза, последний раз видели в здании Московского вокзала г. Санкт-Петербург. Коза белая, пуховая.",
-            chipNumber: "go-011-spb",
-            region: "Центральный",
-            date: "14-03-2022",
-            image: "png/Коза.jpeg"
-          },
-          {
-            id: 14,
-            type: "Кошка",
-            description: "Потерялась кошка, пушистая, серая. Любит играть, ласковая.",
-            chipNumber: "ca-001-spb",
-            region: "Василиостровский",
-            date: "24-03-2020",
-            image: "png/Кошка.jpg"
-          },
-          {
-            id: 42,
-            type: "Собака",
-            description: "Собака рыжая, была утеряна в красногвардейском райне районе",
-            chipNumber: "do-123-spb",
-            region: "Красногвардейский",
-            date: "22-07-2023",
-            image: "png/Собака.jpg"
-          },
-      
-          {
-            id: 42,
-            type: "Собака",
-            description: "Потерялась собака, больших размеров, коричневого цвета. Отзывчивая, дружелюбная.",
-            chipNumber: "dog-123-spb",
-            region: "Московский",
-            date: "01-04-2023",
-            image: "png/Собака1.jpg"
-          },
-      
-        ];
-      
-        function displayAds(filteredAds) {
-          const adsContainer = document.getElementById('adsContainer');
-          adsContainer.innerHTML = '';
-          if (filteredAds.length === 0) {
-            adsContainer.innerHTML = '<p>Объявлений не найдено.</p>';
-            return;
-          }
-          filteredAds.forEach(ad => {
-            const adElement = document.createElement('div');
-            adElement.className = 'ad';
-            adElement.innerHTML = `
-              <img src="${ad.image}" alt="${ad.type}">
-              <p><strong>ID:</strong> ${ad.id}</p>
-              <p><strong>Вид животного:</strong> ${ad.type}</p>
-              <p><strong>Описание:</strong> ${ad.description}</p>
-              <p><strong>Номер чипа:</strong> ${ad.chipNumber}</p>
-              <p><strong>Район:</strong> ${ad.region}</p>
-              <p><strong>Дата:</strong> ${ad.date}</p>
-            `;
-            adsContainer.appendChild(adElement);
-          });
-        }
-      
-        function searchAds() {
-          const region = document.getElementById('regionInput').value.trim();
-          const animalType = document.getElementById('animalTypeInput').value.trim().toLowerCase();
-          const filteredAds = ads.filter(ad => {
-            const matchesRegion = region ? ad.region === region : true;
-            const matchesType = animalType ? ad.type.toLowerCase().includes(animalType) : true;
-            return matchesRegion && matchesType;
-          });
-          displayAds(filteredAds);
-        }
-      
-        displayAds(ads);
-      </script>
- 
- 
-
-   <script>
     let currentPage = 1;
-    const resultsPerPage = 10;
-  
-    async function searchAds() {
-      const region = document.getElementById('regionInput').value.trim();
-      const animalType = document.getElementById('animalTypeInput').value.trim().toLowerCase();
-  
-      // Prepare query parameters
-      const queryParams = new URLSearchParams();
-      if (region) queryParams.append('district', region);
-      if (animalType) queryParams.append('kind', animalType);
-  
-  
-    function displayAds(ads) {
+    const resultsPerPage = 2;  // Установим количество объявлений на странице
+
+    function displayAds(filteredAds) {
       const adsContainer = document.getElementById('adsContainer');
-      adsContainer.innerHTML = '';  // Clear previous ads
-  
-      if (ads.length === 0) {
+      adsContainer.innerHTML = ''; // Очищаем контейнер
+
+      if (filteredAds.length === 0) {
         adsContainer.innerHTML = '<p>Объявлений не найдено.</p>';
         return;
       }
-  
-      // Pagination logic
+
+      // Логика пагинации
       const start = (currentPage - 1) * resultsPerPage;
       const end = start + resultsPerPage;
-      const adsToDisplay = ads.slice(start, end);
-  
+      const adsToDisplay = filteredAds.slice(start, end);
+
       adsToDisplay.forEach(ad => {
         const adElement = document.createElement('div');
         adElement.className = 'ad';
         adElement.innerHTML = `
-          <img src="${ad.photos}" alt="${ad.kind}">
+          <img src="${ad.image}" alt="${ad.type}">
           <p><strong>ID:</strong> ${ad.id}</p>
-          <p><strong>Вид животного:</strong> ${ad.kind}</p>
+          <p><strong>Вид животного:</strong> ${ad.type}</p>
           <p><strong>Описание:</strong> ${ad.description}</p>
-          <p><strong>Номер чипа:</strong> ${ad.mark}</p>
-          <p><strong>Район:</strong> ${ad.district}</p>
+          <p><strong>Номер чипа:</strong> ${ad.chipNumber}</p>
+          <p><strong>Район:</strong> ${ad.region}</p>
           <p><strong>Дата:</strong> ${ad.date}</p>
         `;
         adsContainer.appendChild(adElement);
       });
+
+      setupPagination(filteredAds.length);
     }
-  
+
     function setupPagination(totalResults) {
       const totalPages = Math.ceil(totalResults / resultsPerPage);
       document.getElementById('pageNumber').textContent = currentPage;
-  
-      // Enable/disable pagination buttons
+
+      // Управление кнопками пагинации
       document.getElementById('prevPage').disabled = currentPage === 1;
       document.getElementById('nextPage').disabled = currentPage === totalPages;
-  
-      // Show or hide pagination controls based on the total results
+
       document.getElementById('paginationContainer').style.display = totalResults > resultsPerPage ? 'block' : 'none';
     }
-  
+
+    function searchAds() {
+      const region = document.getElementById('regionInput').value.trim();
+      const animalType = document.getElementById('animalTypeInput').value.trim().toLowerCase();
+
+      const filteredAds = ads.filter(ad => {
+        const matchesRegion = region ? ad.region.includes(region) : true;
+        const matchesType = animalType ? ad.type.toLowerCase().includes(animalType) : true;
+        return matchesRegion && matchesType;
+      });
+
+      currentPage = 1;  // Сбрасываем страницу на первую при новом поиске
+      displayAds(filteredAds);
+    }
+
     function changePage(direction) {
       currentPage += direction;
       searchAds();
     }
-  
-    // Reset page to 1 when new search is triggered
-    document.querySelector('button').addEventListener('click', () => {
-      currentPage = 1;
-      searchAds();
-    });
-  
-    // Initially load ads if any default search criteria exist
+
+    // Инициализация поиска при загрузке страницы
     searchAds();
   </script>
-  
 
-  <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script> </body>
+  <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
